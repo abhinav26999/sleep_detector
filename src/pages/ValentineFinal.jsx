@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useEffect } from "react";
 
-const NAME = "Alex";
+const NAME = "Hy baby";
 
 export default function ValentineFinal() {
     useEffect(() => {
@@ -49,30 +49,19 @@ export default function ValentineFinal() {
                     transition={{ delay: 0.2 }}
                     className="text-5xl font-extrabold text-rose-300 mb-6"
                 >
-                    Happy Valentine’s Day 💖
+                    Happy Valentine’s Day ❤️
                 </motion.h1>
 
                 <p className="text-rose-100/90 text-lg leading-relaxed mb-8">
                     {NAME},
                     <br /><br />
-                    Today isn’t just about flowers or hearts —
-                    it’s about choosing someone and choosing them again.
+                    Miles apart, but you’re still the closest to my heart… my everything.
+                    Thank you for existing, for being you, and for being in my life.
                     <br /><br />
-                    Thank you for being my favorite person,
-                    my safe place,
-                    and my best “yes.”
+                    I may not have the perfect words to define what we are,
+                    but I know exactly what you mean to me.
+                    I love you more than you’ll ever know.🫶🏻❤️
                 </p>
-
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-rose-200 font-semibold text-xl"
-                >
-                    Always you.
-                    <br />
-                    Always us. 💍
-                </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}

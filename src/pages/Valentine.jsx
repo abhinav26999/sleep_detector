@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
 
-const NAME = "Alex";
-
+const NAME = "Hy baby";
 
 const NO_MESSAGES = [
     "No",
@@ -15,6 +14,18 @@ const NO_MESSAGES = [
     "You’re testing me",
     "Okay… pause",
     "You know the answer",
+    "Just click Yes!",
+];
+
+const YES_MESSAGES = [
+    "Yes",
+    "Still yes",
+    "Always yes",
+    "I’m not changing",
+    "Take your time",
+    "I’ll wait",
+    "It’s you",
+    "Only you 💖",
 ];
 
 function generateValentineMessage() {
@@ -36,17 +47,6 @@ function generateValentineMessage() {
     const pick = a => a[Math.floor(Math.random() * a.length)];
     return `${pick(openers)} ${pick(middles)} ${pick(closers)}`;
 }
-
-const YES_MESSAGES = [
-    "Yes",
-    "Still yes",
-    "Always yes",
-    "I’m not changing",
-    "Take your time",
-    "I’ll wait",
-    "It’s you",
-    "Only you 💖",
-];
 
 function FloatingHearts() {
     return (
@@ -80,11 +80,6 @@ export default function Valentine() {
     const [noCount, setNoCount] = useState(0);
     const navigate = useNavigate();
     const [yesTextIndex, setYesTextIndex] = useState(0);
-    const BASE_YES_SIZE = 144;
-
-    const [isFullscreenYes, setIsFullscreenYes] = useState(false);
-
-    const [yesSize, setYesSize] = useState(BASE_YES_SIZE);
 
     const handleYes = () => {
         confetti({
@@ -95,55 +90,41 @@ export default function Valentine() {
 
         setStep("celebration");
 
-        // smooth emotional pause, then go to Valentine Week
         setTimeout(() => {
-            navigate("/week");
+            navigate("/final");
         }, 2500);
     };
 
-
     const handleNo = () => {
-        setNoCount(c => {
-            const next = Math.min(c + 1, NO_MESSAGES.length - 1);
-
-            // 👇 after 4 No clicks → fullscreen
-            if (next >= 4) {
-                setIsFullscreenYes(true);
-            }
-
-            return next;
-        });
-
-        setYesTextIndex(i =>
-            Math.min(i + 1, YES_MESSAGES.length - 1)
-        );
-
-        setYesSize(size => size * 1.35);
+        setNoCount(c => c + 1);
+        setYesTextIndex(i => Math.min(i + 1, YES_MESSAGES.length - 1));
     };
 
 
+    const yesScale = 1 + noCount * 2;
+
+    const noOffset = noCount * 100;
+
+    const isFullscreen = noCount >= 7;
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-rose-900 to-black flex items-center justify-center relative">
+        <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-rose-900 to-black flex items-center justify-center relative overflow-hidden">
             <FloatingHearts />
-            {isFullscreenYes && (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+
+            {/* Fullscreen Overlay Logic */}
+            {isFullscreen && (
+                <motion.button
+                    initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="fixed inset-0 z-[9999] bg-rose-700 flex items-center justify-center"
+                    onClick={handleYes}
+                    className="fixed inset-0 z-[9999] bg-rose-600 flex items-center justify-center text-white font-extrabold text-8xl"
                 >
-                    <button
-                        onClick={handleYes}
-                        className="w-full h-full text-white font-extrabold text-6xl"
-                    >
-                        Only you 💖
-                    </button>
-                </motion.div>
+                    Only you 💖
+                </motion.button>
             )}
 
-
-            <main className="relative z-10 w-[92vw] max-w-xl rounded-3xl p-10 text-center shadow-2xl bg-black/40 backdrop-blur-xl border border-rose-500/20 overflow-hidden">
-
+            {/* Main Card */}
+            <main className="relative z-10 w-[92vw] max-w-xl rounded-3xl p-10 text-center shadow-2xl bg-black/40 backdrop-blur-xl border border-rose-500/20">
                 <AnimatePresence mode="wait">
 
                     {/* INTRO */}
@@ -178,53 +159,49 @@ export default function Valentine() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
+                            className="relative flex flex-col items-center"
                         >
                             <img
                                 src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3NTE1azEybmNzZTlkdHJ6d25yYXI4d29oMHMyOHNpN2cwM2piOWFtMSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/HJZblxmxHb7CbZtmNy/giphy.gif"
                                 alt="love"
-                                className="w-full h-full  mb-6  rounded-xl"
+                                className="w-full h-64 object-cover mb-8 rounded-xl"
                             />
 
                             <h1 className="text-4xl font-extrabold mb-12 text-rose-200">
                                 Will you be my Valentine?
                             </h1>
 
-                            <div className="flex justify-center items-center gap-10 min-h-[140px]">
+                            <div className="flex justify-center items-center gap-6 relative min-h-[100px]">
 
-                                {!isFullscreenYes && (
-                                    <motion.div
-                                        animate={{ width: yesSize, height: yesSize * 0.55 }}
-                                        transition={{ type: "spring", stiffness: 180, damping: 18 }}
-                                        className="flex items-center justify-center"
-                                    >
-                                        <button
-                                            onClick={handleYes}
-                                            className="w-full h-full bg-rose-700 hover:bg-rose-600
-            text-white text-xl font-bold rounded-xl shadow-xl"
-                                        >
-                                            {YES_MESSAGES[yesTextIndex]}
-                                        </button>
-                                    </motion.div>
-                                )}
-
-
-
-
-
-
+                                {/* YES BUTTON (Grows like balloon) */}
                                 <motion.button
-                                    onClick={handleNo}
-                                    className="w-36 h-20 bg-zinc-800 text-rose-200
-             text-sm font-semibold rounded-xl
-             shadow-xl px-2 border border-rose-500/30"
+                                    onClick={handleYes}
+                                    animate={{ scale: yesScale }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                                    className="w-32 h-24 bg-rose-700 hover:bg-rose-600 text-white
+                                    text-xl font-bold rounded-2xl shadow-xl z-20 flex items-center justify-center"
                                 >
-                                    {NO_MESSAGES[noCount]}
+                                    {YES_MESSAGES[yesTextIndex]}
                                 </motion.button>
 
+                                {/* NO BUTTON (Moves horizontally) */}
+                                {!isFullscreen && (
+                                    <motion.button
+                                        onClick={handleNo}
+                                        // Moves to the right based on click count
+                                        animate={{ x: noOffset }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="w-32 h-24 bg-zinc-800 text-rose-200
+                                        text-sm font-semibold rounded-2xl
+                                        shadow-xl border border-rose-500/30 flex items-center justify-center shrink-0 z-10"
+                                    >
+                                        {NO_MESSAGES[Math.min(noCount, NO_MESSAGES.length - 1)]}
+                                    </motion.button>
+                                )}
 
                             </div>
 
-                            <p className="mt-10 text-sm text-rose-200/60">
+                            <p className="mt-16 text-sm text-rose-200/60">
                                 take your time… I’m right here
                             </p>
                         </motion.div>
