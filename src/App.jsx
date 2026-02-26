@@ -226,8 +226,8 @@ export default function App() {
             onFrame: async () => {
                 await faceMesh.send({ image: videoRef.current });
             },
-            width: 320,
-            height: 240,
+            width: 620,
+            height: 540,
         });
 
         camera.start();
@@ -290,6 +290,6 @@ function isHeadTilted(landmarks) {
     if (!leftEye || !rightEye) return false;
 
     const dy = Math.abs(leftEye.y - rightEye.y);
-    return dy > 0.03; // tilt threshold
+    return dy > 0.03;
 }
 
